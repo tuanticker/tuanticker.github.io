@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Mock Runner Redirect</title>
-  <script>
-    (function () {
-      // Lấy query string từ URL hiện tại (chứa code, scope, state)
-      const query = window.location.search || '';
-      // Custom scheme của app
-      const appUrl = 'com.tuanticker.mockrunner://strava-auth' + query;
-
-      // Chuyển tiếp ngay lập tức
-      window.location.replace(appUrl);
-
-      // Dự phòng: sau 5 giây hiện link để user bấm tay nếu auto fail
-      setTimeout(() => {
-        const link = document.getElementById('fallback');
-        link.href = appUrl;
-        link.style.display = 'inline';
-      }, 5000);
-    })();
-  </script>
+  <meta charset="UTF-8" />
+  <title>Strava Redirect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; }
+    .hidden { display: none; }
+  </style>
 </head>
 <body>
-  <p>Đang chuyển bạn về ứng dụng Mock Runner...</p>
-  <a id="fallback" style="display:none;">Bấm vào đây nếu không tự chuyển</a>
+  <h1>Đang chuyển về ứng dụng Mock Runner…</h1>
+  <p>Nếu app không tự mở trong vài giây, hãy bấm nút bên dưới.</p>
+  <button id="open-app">Mở Mock Runner thủ công</button>
+
+  <script>
+    (function () {
+      const query = window.location.search || '';
+      const appUrl = 'mockrunner://oauth/strava' + query;
+
+      // Thử mở app ngay lập tức
+      window.location.replace(appUrl);
+
+      // Hiển thị nút fallback sau 1.5s
+      const btn = document.getElementById('open-app');
+      setTimeout(() => {
+        btn.classList.remove('hidden');
+        btn.addEventListener('click', () => {
+          window.location.href = appUrl;
+        });
+      }, 1500);
+
+      // Nếu người dùng quay trở lại, cung cấp link kiểm tra
+      setTimeout(() => {
+        if (document.visibilityState === 'visible') {
+          document.body.insertAdjacentHTML('beforeend',
+            '<p>Không mở được app? Kiểm tra lại quyền deep link hoặc cài đặt app.</p>');
+        }
+      }, 3000);
+    })();
+  </script>
 </body>
 </html>
