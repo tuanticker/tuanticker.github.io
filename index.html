@@ -17,7 +17,7 @@
   <script>
     (function () {
       const query = window.location.search || '';
-      const appUrl = 'mockrunner://oauth/strava' + query;
+      const appUrl = 'mockrunner://oauth/strava' + window.location.search;
 
       // Thử mở app ngay lập tức
       window.location.replace(appUrl);
