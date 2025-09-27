@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Mock Runner Redirect</title>
+  <script>
+    (function () {
+      // Lấy query string từ URL hiện tại (chứa code, scope, state)
+      const query = window.location.search || '';
+      // Custom scheme của app
+      const appUrl = 'com.tuanticker.mockrunner://strava-auth' + query;
+
+      // Chuyển tiếp ngay lập tức
+      window.location.replace(appUrl);
+
+      // Dự phòng: sau 5 giây hiện link để user bấm tay nếu auto fail
+      setTimeout(() => {
+        const link = document.getElementById('fallback');
+        link.href = appUrl;
+        link.style.display = 'inline';
+      }, 5000);
+    })();
+  </script>
+</head>
+<body>
+  <p>Đang chuyển bạn về ứng dụng Mock Runner...</p>
+  <a id="fallback" style="display:none;">Bấm vào đây nếu không tự chuyển</a>
+</body>
+</html>
